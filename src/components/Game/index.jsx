@@ -1,12 +1,13 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { GameContainer } from './style'
 
 
-export function Game({secretWord, score, setScore, setWin }) {
+export function Game({ secretWord, score, setScore, setWin }) {
   const [letter, setLetter] = useState('')
   const [word, setWord] = useState(new Array(secretWord.length).fill('_'))
-  const [wordsUsed,setWordsUsed] = useState([])
+  const [wordsUsed, setWordsUsed] = useState([])
 
+  useEffect(() => { setWord(new Array(secretWord.length).fill('_')) }, [secretWord])
   const handleCheckLetter = (event) => {
     event.preventDefault()
     if (secretWord.includes(letter)) {
@@ -23,15 +24,15 @@ export function Game({secretWord, score, setScore, setWin }) {
         })
         setWord(newWord)
       }
-    } else if(!wordsUsed.includes(letter)){
+    } else if (!wordsUsed.includes(letter)) {
       setScore(score - 1)
     }
-    
-    if (!word.includes('_') ) {
+
+    if (!word.includes('_')) {
       setWin(true)
     }
-    
-    setWordsUsed([...wordsUsed,letter])
+
+    setWordsUsed([...wordsUsed, letter])
     setLetter('')
   }
 
