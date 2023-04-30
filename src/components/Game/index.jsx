@@ -40,7 +40,7 @@ export function Game({secretWord, score, setScore, setWin }) {
       <h1>{word}</h1>
       <h2>{score} TENTATIVAS</h2>
       <form onSubmit={handleCheckLetter}>
-        <input required type="text" maxLength={1} value={letter} onChange={(event) => setLetter(event.target.value)} />
+        <input required type="text" maxLength={1} value={letter} onChange={(event) => setLetter(event.target.value.toLowerCase())} />
       </form>
     </GameContainer>
   )
