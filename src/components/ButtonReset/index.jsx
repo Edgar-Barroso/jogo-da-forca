@@ -1,8 +1,8 @@
 import { ButtonResetContainer } from "./style";
 import {TbReload} from 'react-icons/tb';
-export function ButtonReset() {
+export function ButtonReset({handleResetGame}) {
     return (
-        <ButtonResetContainer>
+        <ButtonResetContainer onClick={handleResetGame}>
             <TbReload/>
         </ButtonResetContainer>)
 }

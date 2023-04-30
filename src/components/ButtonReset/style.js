@@ -13,6 +13,7 @@ export const ButtonResetContainer = styled.button`
     top: 65%;
     border: 3px solid #171720;
     transform: translate(-50%, -50%);
+    z-index: 40;
 
     :hover{
         background:  #171720;

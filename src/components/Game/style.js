@@ -24,7 +24,7 @@ export const GameContainer = styled.div`
         input[type="text"] {
             text-align: center;
             color: #bbbbbb;
-            border: none;
+            border: 1px solid white;
             width: 80px;
             height: 80px;
             font-size: 3rem;

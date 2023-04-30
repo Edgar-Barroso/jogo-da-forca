@@ -4,7 +4,7 @@ import { Cursor } from './helpers/Drag'
 import { BodyPart, Face } from './components/Guy'
 import { Lamp } from './components/Furniture'
 import { Floor } from './components/Floor'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Game } from './components/Game'
 import { createRagdoll } from './helpers/createRagdoll'
 import { Text } from './components/Text'
@@ -18,13 +18,23 @@ export function App() {
   const [score, setScore] = useState(5)
   const [lose, setLose] = useState(false)
   const [win, setWin] = useState(false)
-  const [secretWord, _] = useState( words[Math.floor(Math.random() * words.length)])
+  const [secretWord, setSecretWord] = useState(words[Math.floor(Math.random() * words.length)])
 
+
+  const handleResetGame = () => {
+    setScore(5)
+    setLose(false)
+    setWin(false)
+    setSecretWord(words[Math.floor(Math.random() * words.length)])
+
+  }
   useEffect(() => {
     if (score === 0) {
       setLose(true)
     }
   }, [score])
+
+
 
 
   return (
@@ -44,10 +54,11 @@ export function App() {
         <fog attach="fog" args={['#171720', 60, 90]} />
         <ambientLight intensity={0.2} />
         <pointLight position={[-20, -5, -20]} color="red" />
-        <pointLight position={[0, 0, 0]} color={lose && "red" || win && 'green'} />
-        <Physics allowSleep={false} iterations={15} gravity={[0, (lose || win) ? -200 : 0, 0]}>
+        {lose && <pointLight position={[0, 0, 0]} color={'red'} />}
+        {win && <pointLight position={[0, 0, 0]} color={'green'} />}
+        <Physics allowSleep={false} iterations={15} gravity={[0, (lose && !win) ? -200 : 0, 0]}>
           <Cursor />
-          <BodyPart name="upperBody">
+          <BodyPart  position={[0, 5, 0]} name="upperBody">
             {score < 5 && <BodyPart name="head" config={joints['neckJoint']} render={<Face />} />}
             {score < 4 && <BodyPart name="upperLeftArm" config={joints['leftShoulder']}>
               <BodyPart name="lowerLeftArm" config={joints['leftElbowJoint']} />
@@ -70,6 +81,7 @@ export function App() {
         </Physics>
       </Canvas>
       {!(lose || win) && <Game secretWord={secretWord} score={score} setScore={setScore} setWin={setWin} />}
+      {(lose || win) && < ButtonReset handleResetGame={handleResetGame} />}
     </div>
   )
 }
