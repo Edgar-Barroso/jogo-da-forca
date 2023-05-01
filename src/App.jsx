@@ -17,7 +17,7 @@ import { Caption } from './components/Caption'
 
 export function App() {
   const [score, setScore] = useState(5)
-  const [resultGame,setResultGame] = useState(null)
+  const [resultGame, setResultGame] = useState(null)
   const [secretWord, setSecretWord] = useState(randomWord())
 
 
@@ -45,22 +45,22 @@ export function App() {
         <pointLight position={[20, -5, 20]} color="blue" />
         <pointLight position={[-20, -5, -20]} color="red" />
 
-        
 
 
-        <Caption color={resultGame==='WIN' ? 'green' : 'red'} text={resultGame ?? ''} />
+
+        <Caption color={resultGame === 'WIN' ? 'green' : 'red'} text={resultGame ?? ''} />
 
         <Physics allowSleep={false} iterations={15} gravity={[0, 0, 0]}>
           <Cursor />
           <Guy key={secretWord} score={score} position={[0, 0, 0]} />
-          <Lamp position={[0,20,0]}/>
+          <Lamp position={[0, 20, 0]} />
         </Physics>
         <Stars />
         <OrbitControls makeDefault autoRotate autoRotateSpeed={.4} enableZoom={false} />
       </Canvas>
 
 
-      {!(resultGame) && <Game secretWord={secretWord} score={score} setScore={setScore } setResultGame={setResultGame} />}
+      {!(resultGame) && <Game secretWord={secretWord} score={score} setScore={setScore} setResultGame={setResultGame} />}
       {(resultGame) && < ButtonReset handleResetGame={handleResetGame} />}
     </div>
   )
