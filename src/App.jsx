@@ -1,15 +1,17 @@
-import { Canvas } from '@react-three/fiber'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { Physics } from '@react-three/cannon'
 import { Cursor } from './helpers/Drag'
 import { BodyPart, Face } from './components/Guy'
 import { Lamp } from './components/Furniture'
 import { Floor } from './components/Floor'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, Suspense } from 'react'
 import { Game } from './components/Game'
 import { createRagdoll } from './helpers/createRagdoll'
-import { Text } from './components/Text'
 import { ButtonReset } from './components/ButtonReset'
 import { words } from './utils/words'
+import { Points, PointMaterial, OrbitControls, Text } from '@react-three/drei'
+import * as random from 'maath/random/dist/maath-random.esm'
+
 
 
 const { shapes, joints } = createRagdoll(5.5, Math.PI / 16, Math.PI / 16, 0)
@@ -39,26 +41,23 @@ export function App() {
 
   return (
     <div style={{ width: '100vw', height: '100vh' }}>
-      {win && <Text text={'WIN'} color={'green'} />}
-      {lose && <Text text={'LOSE'} color={'red'} />}
       <Canvas
-        dpr={[1, 2]}
         shadows
         camera={{
-          position: [-40, 40, 50],
-          fov: 25,
-          near: 1,
-          far: 100,
+          position: [0, 20, 50],
+          fov: 30,
         }}>
+        <Caption color={'green'} text={win ? 'WIN' : ''} />
+        <Caption color={'red'} text={lose ? 'LOSE' : ''} />
         <color attach="background" args={['#171720']} />
-        <fog attach="fog" args={['#171720', 60, 90]} />
-        <ambientLight intensity={0.2} />
+        <fog attach="fog" args={['#171720', 80, 80]} />
+        <ambientLight intensity={0.1} />
         <pointLight position={[-20, -5, -20]} color="red" />
-        {lose && <pointLight position={[0, 0, 0]} color={'red'} />}
-        {win && <pointLight position={[0, 0, 0]} color={'green'} />}
+        {lose && <pointLight position={[0, 5, 0]} color={'red'} />}
+        {win && <pointLight position={[0, 5, 0]} color={'green'} />}
         <Physics allowSleep={false} iterations={15} gravity={[0, (lose && !win) ? -200 : 0, 0]}>
           <Cursor />
-          <BodyPart  position={[0, 5, 0]} name="upperBody">
+          <BodyPart position={[0, 5, 0]} name="upperBody">
             {score < 5 && <BodyPart name="head" config={joints['neckJoint']} render={<Face />} />}
             {score < 4 && <BodyPart name="upperLeftArm" config={joints['leftShoulder']}>
               <BodyPart name="lowerLeftArm" config={joints['leftElbowJoint']} />
@@ -79,9 +78,50 @@ export function App() {
           <Lamp position={[0, 20, 0]} />
 
         </Physics>
+        <OrbitControls makeDefault autoRotate />
+
+        <Stars />
       </Canvas>
       {!(lose || win) && <Game secretWord={secretWord} score={score} setScore={setScore} setWin={setWin} />}
       {(lose || win) && < ButtonReset handleResetGame={handleResetGame} />}
     </div>
+  )
+}
+
+
+function Stars(props) {
+  const ref = useRef()
+  const [sphere] = useState(() => random.inSphere(new Float32Array(5000), { radius: 40 }))
+  useFrame((state, delta) => {
+    ref.current.rotation.x -= delta / 100
+    ref.current.rotation.y -= delta / 150
+  })
+  return (
+    <group rotation={[0, 0, Math.PI / 4]}>
+      <Points ref={ref} positions={sphere} stride={3} frustumCulled={false} {...props}>
+        <PointMaterial transparent color="#ffa0e0" size={0.2} sizeAttenuation={true} depthWrite={false} />
+      </Points>
+    </group>
+  )
+}
+
+
+
+
+function Caption(props) {
+  const { width } = useThree((state) => state.viewport)
+  return (
+    <Text
+      autoRotate
+      position={[-2, 10, 5]}
+      lineHeight={0.8}
+      font="/Ki-Medium.ttf"
+      fontSize={width / 10}
+      material-toneMapped={false}
+      anchorX="center"
+      anchorY="middle"
+      color={props.color}
+    >{props.text}
+    </Text>
   )
 }

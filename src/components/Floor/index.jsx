@@ -3,7 +3,7 @@ import { MeshReflectorMaterial } from '@react-three/drei'
 import { usePlane } from '@react-three/cannon'
 
 export function Floor(props) {
-  const [ref] = usePlane(() => ({ type: 'Static', ...props }))
+  const [ref] = usePlane(() => ({ type: 'Kinematic', ...props }))
   return (
     <mesh ref={ref} receiveShadow>
       <planeGeometry args={[100, 100]} />
