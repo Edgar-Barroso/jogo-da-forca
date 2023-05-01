@@ -1,4 +1,4 @@
-export const words = [
+const words = [
     "abacaxi",
     "abelha",
     "abobora",
@@ -141,3 +141,8 @@ export const words = [
     "gaveta",
     "gel",
 ];
+
+export function randomWord(){
+    const word = words[Math.floor(Math.random() * words.length)].toUpperCase()
+    return word
+}

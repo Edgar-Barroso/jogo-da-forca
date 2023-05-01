@@ -7,7 +7,7 @@ import { Floor } from './components/Floor'
 import { useEffect, useState } from 'react'
 import { Game } from './components/Game'
 import { ButtonReset } from './components/ButtonReset'
-import { words } from './utils/words'
+import { randomWord } from './utils/words'
 import { OrbitControls } from '@react-three/drei'
 import { Stars } from './components/Stars'
 import { Caption } from './components/Caption'
@@ -17,25 +17,21 @@ import { Caption } from './components/Caption'
 
 export function App() {
   const [score, setScore] = useState(5)
-  const [lose, setLose] = useState(false)
-  const [win, setWin] = useState(false)
-  const [secretWord, setSecretWord] = useState(words[Math.floor(Math.random() * words.length)])
+  const [resultGame,setResultGame] = useState(null)
+  const [secretWord, setSecretWord] = useState(randomWord())
 
 
   const handleResetGame = () => {
     setScore(5)
-    setLose(false)
-    setWin(false)
-    setSecretWord(words[Math.floor(Math.random() * words.length)])
+    setResultGame(null)
+    setSecretWord(randomWord())
 
   }
   useEffect(() => {
     if (score === 0) {
-      setLose(true)
+      setResultGame('LOSE')
     }
   }, [score])
-
-
 
 
   return (
@@ -52,22 +48,20 @@ export function App() {
         
 
 
-        <Caption color={'green'} text={win ? 'WIN' : ''} />
-        <Caption color={'red'} text={lose ? 'LOSE' : ''} />
-
+        <Caption color={resultGame==='WIN' ? 'green' : 'red'} text={resultGame ?? ''} />
 
         <Physics allowSleep={false} iterations={15} gravity={[0, 0, 0]}>
           <Cursor />
-          <Guy score={score} position={[0, 0, 0]} />
+          <Guy key={secretWord} score={score} position={[0, 0, 0]} />
           <Lamp position={[0,20,0]}/>
         </Physics>
         <Stars />
-        <OrbitControls makeDefault autoRotate autoRotateSpeed={.3} enableZoom={false} />
+        <OrbitControls makeDefault autoRotate autoRotateSpeed={.4} enableZoom={false} />
       </Canvas>
 
 
-      {!(lose || win) && <Game secretWord={secretWord} score={score} setScore={setScore} setWin={setWin} />}
-      {(lose || win) && < ButtonReset handleResetGame={handleResetGame} />}
+      {!(resultGame) && <Game secretWord={secretWord} score={score} setScore={setScore } setResultGame={setResultGame} />}
+      {(resultGame) && < ButtonReset handleResetGame={handleResetGame} />}
     </div>
   )
 }
