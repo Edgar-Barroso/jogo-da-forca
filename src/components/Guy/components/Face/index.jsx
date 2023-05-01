@@ -1,6 +1,6 @@
 import { useFrame } from "@react-three/fiber"
 import { useRef } from "react"
-import { Block } from "../../../../helpers/Block"
+import { Block } from "../../../Block"
 
 export function Face() {
     const mouth = useRef()

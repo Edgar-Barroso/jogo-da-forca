@@ -2,8 +2,8 @@ import * as THREE from 'three'
 import { useState } from 'react'
 import { useGLTF, SpotLight } from '@react-three/drei'
 import { useCompoundBody, useSphere, useCylinder, useDistanceConstraint, usePointToPointConstraint } from '@react-three/cannon'
-import { useDragConstraint } from '../../helpers/Drag'
-import { Block } from '../../helpers/Block'
+import { Block } from '../Block'
+import { useDragConstraint } from '../Drag'
 
 export function Chair(props) {
   const [ref] = useCompoundBody(() => ({
@@ -94,7 +94,7 @@ export function Lamp(props) {
         angle={0.45}
         attenuation={20}
         anglePower={5}
-        intensity={1}
+        intensity={2}
         opacity={0.2}
       />
       <primitive object={target} position={[0, -1, 0]} />

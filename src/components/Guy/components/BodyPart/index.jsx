@@ -1,8 +1,8 @@
 import { createContext, useContext } from "react"
-import { createRagdoll } from "../../../../helpers/createRagdoll"
+import { createRagdoll } from "../../../../utils/createRagdoll"
 import { useBox, useConeTwistConstraint } from "@react-three/cannon"
-import { useDragConstraint } from "../../../../helpers/Drag"
-import { Block } from "../../../../helpers/Block"
+import { Block } from "../../../Block"
+import { useDragConstraint } from "../../../Drag"
 
 const { shapes, joints } = createRagdoll(5.5, Math.PI / 16, Math.PI / 16, 0)
 const context = createContext()
