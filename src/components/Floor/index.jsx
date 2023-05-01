@@ -6,7 +6,7 @@ export function Floor(props) {
   const [ref] = usePlane(() => ({ type: 'Kinematic', ...props }))
   return (
     <mesh ref={ref} receiveShadow>
-      <planeGeometry args={[100, 100]} />
+      <circleGeometry args={[100, 100]} />
       <MeshReflectorMaterial
         color="#878790"
         blur={[400, 400]}

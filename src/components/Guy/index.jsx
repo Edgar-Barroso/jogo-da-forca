@@ -1,43 +1,25 @@
-import { createContext, useContext, useRef } from 'react'
-import { useFrame } from '@react-three/fiber'
-import { useBox, useConeTwistConstraint } from '@react-three/cannon'
 import { createRagdoll } from '../../helpers/createRagdoll'
-import { useDragConstraint } from '../../helpers/Drag'
-import { Block } from '../../helpers/Block'
+import { BodyPart } from './components/BodyPart'
+import { Face } from './components/Face'
 
 const { shapes, joints } = createRagdoll(5.5, Math.PI / 16, Math.PI / 16, 0)
-const context = createContext()
 
-export const BodyPart = ({ config, children, render, name, ...props }) => {
-  const { color, args, mass, position } = shapes[name]
-  const parent = useContext(context)
-  const [ref] = useBox(() => ({ mass, args, position, linearDamping: 0.99, ...props }))
-  useConeTwistConstraint(ref, parent, config)
-  const bind = useDragConstraint(ref)
-  return (
-    <context.Provider value={ref}>
-      <Block castShadow receiveShadow ref={ref} {...props} {...bind} scale={args} name={name} color={color}>
-        {render}
-      </Block>
-      {children}
-    </context.Provider>
-  )
-}
-
-export function Face() {
-  const mouth = useRef()
-  const eyes = useRef()
-  useFrame((state) => {
-    eyes.current.position.y = Math.sin(state.clock.elapsedTime * 2) * 0.1
-    mouth.current.scale.y = (1 + Math.sin(state.clock.elapsedTime * 2)) * 0.6
-  })
-  return (
-    <>
-      <group ref={eyes}>
-        <Block position={[-0.3, 0.1, 0.5]} args={[0.2, 0.1, 0.1]} color="black" transparent opacity={0.8} />
-        <Block position={[0.3, 0.1, 0.5]} args={[0.2, 0.1, 0.1]} color="black" transparent opacity={0.8} />
-      </group>
-      <Block ref={mouth} position={[0, -0.2, 0.5]} args={[0.3, 0.05, 0.1]} color="#700000" transparent opacity={0.8} />
-    </>
-  )
+export function Guy({ score }) {
+  return (<BodyPart position={[0, 5, 0]} name="upperBody">
+    {score < 5 && <BodyPart name="head" config={joints['neckJoint']} render={<Face />} />}
+    {score < 4 && <BodyPart name="upperLeftArm" config={joints['leftShoulder']}>
+      <BodyPart name="lowerLeftArm" config={joints['leftElbowJoint']} />
+    </BodyPart>}
+    {score < 3 && <BodyPart name="upperRightArm" config={joints['rightShoulder']}>
+      <BodyPart name="lowerRightArm" config={joints['rightElbowJoint']} />
+    </BodyPart>}
+    {score < 5 && <BodyPart name="pelvis" config={joints['spineJoint']}>
+      {score < 2 && <BodyPart name="upperLeftLeg" config={joints['leftHipJoint']}>
+        <BodyPart name="lowerLeftLeg" config={joints['leftKneeJoint']} />
+      </BodyPart>}
+      {score < 1 && <BodyPart name="upperRightLeg" config={joints['rightHipJoint']}>
+        <BodyPart name="lowerRightLeg" config={joints['rightKneeJoint']} />
+      </BodyPart>}
+    </BodyPart>}
+  </BodyPart>)
 }
