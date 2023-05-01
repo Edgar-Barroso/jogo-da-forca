@@ -49,6 +49,8 @@ export function App() {
         <pointLight position={[20, -5, 20]} color="blue" />
         <pointLight position={[-20, -5, -20]} color="red" />
 
+        
+
 
         <Caption color={'green'} text={win ? 'WIN' : ''} />
         <Caption color={'red'} text={lose ? 'LOSE' : ''} />
@@ -57,6 +59,7 @@ export function App() {
         <Physics allowSleep={false} iterations={15} gravity={[0, 0, 0]}>
           <Cursor />
           <Guy score={score} position={[0, 0, 0]} />
+          <Lamp position={[0,20,0]}/>
         </Physics>
         <Stars />
         <OrbitControls makeDefault autoRotate autoRotateSpeed={.3} enableZoom={false} />

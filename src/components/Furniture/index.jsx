@@ -89,7 +89,7 @@ export function Lamp(props) {
         target={target}
         penumbra={0.2}
         radiusTop={0.4}
-        radiusBottom={40}
+        radiusBottom={60}
         distance={80}
         angle={0.45}
         attenuation={20}
