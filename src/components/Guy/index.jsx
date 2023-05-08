@@ -21,5 +21,6 @@ export function Guy({ score, ...props }) {
         <BodyPart {...props} name="lowerRightLeg" config={joints['rightKneeJoint']} />
       </BodyPart>}
     </BodyPart>}
+    
   </BodyPart>)
 }
