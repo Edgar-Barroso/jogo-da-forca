@@ -82,7 +82,7 @@ export function Lamp(props) {
   usePointToPointConstraint(fixed, lamp, { pivotA: [0, 0, 0], pivotB: [0, 2, 0] })
   return (
     <mesh ref={lamp} {...bind}>
-      <cylinderGeometry args={[0.5, 1.5, 2, 32]} />
+      {/* <cylinderGeometry args={[0.5, 1.5, 2, 32]} /> */}
       <meshStandardMaterial />
       <SpotLight
         castShadow
